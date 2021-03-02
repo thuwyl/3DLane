@@ -3,6 +3,7 @@ import os
 import numpy as np
 import cv2
 import utils.calibration as calibration
+from PIL import Image
 
 class KITTIDataset(object):
     def __init__(self, root_dir, split = 'train'):
@@ -22,6 +23,14 @@ class KITTIDataset(object):
         img_file = os.path.join(self.image_dir, '%06d.png' % idx)
         assert os.path.exists(img_file)
         return cv2.imread(img_file)   #(H,W,3) BGR mode
+    
+    def get_image_shape(self, idx):
+        img_file = os.path.join(self.image_dir, '%06d.png' % idx)
+        assert os.path.exists(img_file)
+        im = Image.open(img_file)
+        width, height = im.size
+        return height, width, 3
+
     
     def get_lidar(self, idx):
         lidar_file = os.path.join(self.lidar_dir, '%06d.bin'% idx)
